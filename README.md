@@ -15,8 +15,7 @@ Mở Terminal, trỏ đến thư mục mã nguồn và cài đặt:
 pip install -r requirements.txt
 ```
 
-### 2. Tải Dữ liệu & Cấu Trúc Model (Rất Quan Trọng)
-> **Lưu ý:** Github giới hạn dung lượng nên không thể đẩy thư mục AI (nặng 1GB) lên Repo này. Để Server của bạn chạy được Code, bạn phải TỰ TẠO thủ công 2 thư mục `Data` và `models` nhé.
+### 2. Tải Dữ liệu & Cấu Trúc Model 
 
 Cấu trúc cây dữ liệu bắt buộc phải có để Load Web:
 ```
