@@ -1,0 +1,33 @@
+# Môi trường ảo (Virtual Environments)
+.env
+.venv
+env/
+venv/
+ml_env/
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Dữ liệu & AI Models (Tuyệt đối không đẩy lên Git vì siêu nặng!)
+Data/
+models/
+*.csv
+*.json
+*.sqlite
+*.safetensors
+*.bin
+
+# Log và các file Jupyter notebook cũ
+.ipynb_checkpoints
+*.ipynb
+
+# Các file rác hệ điều hành Mac/Windows
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+*.zip
+*.tar.gz
