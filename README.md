@@ -6,41 +6,5 @@ Hệ thống AI y tế nội bộ sử dụng Mô hình NLP (BioBERT) và Comput
 2. **Khai Phá Bệnh Án Thực Tế (NLP - NER)**: Trích xuất chính xác cấu trúc hóa học và biệt dược (Drug Named Entities) khỏi văn bản y khoa phức tạp.
 3. **Tra cứu tương tác thời gian thực**: Thuật toán quét O(1) rà soát database với cảnh báo rủi ro từ thư viện quốc gia Canada (DrugBank).
 
-## 🛠 Hướng Dẫn Cài Đặt & Triển Khai Server
 
-### 1. Chuẩn bị môi trường
-Hệ thống tương thích tốt nhất với `Python 3.12`.
-Mở Terminal, trỏ đến thư mục mã nguồn và cài đặt:
-```bash
-pip install -r requirements.txt
-```
 
-### 2. Tải Dữ liệu & Cấu Trúc Model 
-
-Cấu trúc cây dữ liệu bắt buộc phải có để Load Web:
-```
-.
-├── Data/
-│   └── processed/
-│       ├── drugbank_drugs.csv
-│       ├── drugbank_interactions.csv
-├── models/
-│   └── ner_model/
-│       ├── config.json
-│       ├── model.safetensors
-│       └── ... (các file bộ não của Model kéo từ Kaggle về)
-├── src/
-│   ├── inference.py
-│   ├── interaction.py
-│   ├── ocr_engine.py
-├── app.py
-├── requirements.txt
-└── .gitignore
-```
-
-### 3. Ra mắt Server Giao Diện Web
-Sau khi hoàn tất cài đặt, gõ lệnh sao để bật Web Server:
-```bash
-streamlit run app.py
-```
-Ứng dụng sẽ tự động nhảy lên trình duyệt tại cổng `http://localhost:8501`.
