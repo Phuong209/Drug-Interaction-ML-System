@@ -21,40 +21,52 @@ class DrugNERPipeline:
         tokens = self.tokenizer.convert_ids_to_tokens(inputs["input_ids"][0])
         
         drugs = []
-        current_drug = []
+        current_drug = ""
         
         for token, pred in zip(tokens, predictions):
             label = self.id2label[pred.item()]
             
-            # Tách bỏ các từ đặc biệt của Tokenizer
-            if token in ['[CLS]', '[SEP]', '[PAD]']:
+            # Bỏ qua special tokens
+            if token in ['[CLS]', '[SEP]', '[PAD]', '[UNK]']:
                 continue
                 
-            # Loại bỏ kỹ hiệu subword ##
+            is_subword = token.startswith("##")
             clean_token = token.replace("##", "")
             
             if label == 'B-DRUG':
-                if current_drug:
-                    # Nếu đang có thuốc trước đó thì đóng lại
-                    drugs.append(" ".join(current_drug))
-                    current_drug = []
-                current_drug.append(clean_token)
+                # Model đôi khi gán B-DRUG cho từng ##subword thay vì I-DRUG
+                if is_subword and current_drug:
+                    current_drug += clean_token
+                else:
+                    if current_drug:
+                        drugs.append(current_drug)
+                    current_drug = clean_token
             elif label == 'I-DRUG':
-                current_drug.append(clean_token)
-            else:
-                if current_drug:
-                    drugs.append(" ".join(current_drug))
-                    current_drug = []
-                    
+                if not current_drug:
+                    current_drug = clean_token
+                else:
+                    if is_subword:
+                        current_drug += clean_token
+                    else:
+                        current_drug += " " + clean_token
+            else: # label == 'O'
+                # Đôi khi model gán O cho phần đuôi của subword
+                if is_subword and current_drug:
+                    current_drug += clean_token
+                else:
+                    if current_drug:
+                        drugs.append(current_drug)
+                        current_drug = ""
+                        
         if current_drug:
-            drugs.append(" ".join(current_drug))
+            drugs.append(current_drug)
             
-        # Format lại chữ, bỏ khoảng trắng dư do ## tạo ra và lọc trùng
+        # Format lại chữ, loại bỏ rác và lọc trùng
         seen = set()
         cleaned_drugs = []
         for d in drugs:
             d = d.replace("  ", " ").strip()
-            # Loại bỏ các chữ rác vô nghĩa bị nhận nhầm
+            # Giữ lại nếu là tên thuốc có nghĩa (Dài hơn 2 kí tự)
             if len(d) > 2 and d.lower() not in seen:
                 cleaned_drugs.append(d)
                 seen.add(d.lower())
